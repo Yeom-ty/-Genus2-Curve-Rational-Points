@@ -1,0 +1,35 @@
+# Define polynomial ring over rational numbers
+R.<x> = QQ[]
+# Define polynomial for genus-2 hyperelliptic curve: y² = x⁶ + 1
+f = x^6 + 1
+# Construct genus-2 hyperelliptic curve
+C = HyperellipticCurve(f)
+print("Hyperelliptic Curve:", C)
+
+# Calculate rational points for x ∈ [-5, 5]
+print("\nRational Points on C (x in [-5,5]):")
+for x_val in range(-5, 6):
+    y_sq = f(x_val)
+    if y_sq.is_square():
+        y = y_sq.sqrt()
+        print(f"({x_val}, {y})")
+
+# Construct Jacobian variety of the curve
+J = C.jacobian()
+print("\nJacobian Variety of C:", J)
+
+# Simplified Jacobian point analysis (compatible with SageMathCell)
+print("\n=== Simplified Jacobian Point Analysis ===")
+try:
+    # Map curve's rational point to Jacobian
+    P = C(0, 1)  # Rational point (0,1)
+    J_P = J(P)   # Jacobian point from curve point
+    print("Jacobian point mapped from (0,1):", J_P)
+    
+    # Check if the point is non-trivial (not the identity element)
+    if J_P != J(0):
+        print("This is a non-trivial rational point in the Jacobian.")
+    else:
+        print("This is the identity element of the Jacobian.")
+except Exception as e:
+    print("Analysis failed:", e)
